@@ -4,8 +4,11 @@ const ocAddTodoTitle = document.getElementById('ocAddTodoTitle')
 const ocAddTodoSaveButton = document.getElementById('ocAddTodoSaveButton')
 const ocAddTodoItemsList = document.getElementById('ocAddTodoItemsList')
 const todoListBody = document.getElementById('todoListBody')
+const offcanvasEditTodoLabel = document.getElementById('offcanvasEditTodoLabel')
+const ocEditTodoList = document.getElementById('ocEditTodoList')
 let ocAddTodoItems = []
 let todos = []
+let activeTodo = {}
 
 //HTML - Templates
 const todoItem = (id, value) => {
@@ -48,10 +51,44 @@ const todoListItem = (todo, index) => {
         <td>${status}</td>
         <td>${dayjs(todo.id).format('MMM DD, YYYY')}</td>
         <td align="right">
-            <button type="button" class="btn btn-secondary btn-sm mr-1">Edit</button>
+            <button 
+                type="button" 
+                class="btn btn-secondary btn-sm mr-1" 
+                data-bs-toggle="offcanvas" 
+                href="#offcanvasEditTodo" 
+                role="button" 
+                aria-controls="offcanvasEditTodo"
+                onclick="setActiveTodo(${todo.id})"
+            >
+                Edit
+            </button>
             <button type="button" class="btn btn-danger btn-sm">Remove</button>
         </td>
     </tr>
+    `
+}
+
+const todoEditItem = ({ id, value, complete } = item) => {
+    return `
+    <div class="input-group mb-3">
+        <div class="input-group-text">
+            <input 
+                class="form-check-input mt-0" 
+                type="checkbox" 
+                value="${complete}"
+                aria-label="Checkbox for following text input"
+                ${complete ? 'checked' : ''}
+            >
+        </div>
+        <input type="text" class="form-control" aria-label="Text input with checkbox" value="${value}">
+        <button 
+            class="btn btn-outline-danger" 
+            type="button" 
+            onclick="removeTodoItem(${id})"
+        >
+            Remove
+        </button>
+    </div>
     `
 }
 
@@ -80,6 +117,7 @@ const addItem = (e) => {
 
     ocAddTodoItems.push(item)
     ocAddTodoReplaceItemsList()
+    bringInputIntoFocus(ocAddTodoItems.length - 1)
 }
 
 const ocAddTodoRemoveItem = (e) => {
@@ -134,9 +172,38 @@ const ocAddTodoSave = () => {
 }
 
 //MAIN TODO LIST
+const renderActiveTodo = (activeTodo) => {
+    ocEditTodoList.innerHTML = activeTodo.items.map(item => todoEditItem(item)).join('')
+}
+
 const populateTheList = () => {
     const html = todos.map((todo, index) => todoListItem(todo, index))
     todoListBody.innerHTML = html.join('')
+}
+
+const setActiveTodo = (id) => {
+    activeTodo = todos.find(todo => todo.id == id)
+    offcanvasEditTodoLabel.innerText = activeTodo.title
+    renderActiveTodo(activeTodo)
+}
+
+const removeTodoItem = (id) => {
+    const items = activeTodo.items.filter(item => parseInt(item.id) !== id)
+    activeTodo = { ...activeTodo, items }
+
+    todos = todos.map(todo => {
+        if (todo.id == activeTodo.id) {
+            return activeTodo
+        }
+
+        return todo
+    })
+
+    renderActiveTodo(activeTodo)
+}
+
+const toggleComplete = () => {
+
 }
 
 
@@ -144,4 +211,13 @@ const populateTheList = () => {
 window.addEventListener('DOMContentLoaded', () => {
     ocAddTodoItem.addEventListener('click', addItem)
     ocAddTodoSaveButton.addEventListener('click', ocAddTodoSave)
+
+    document.addEventListener('keypress', (event) => {
+        // console.log(event)
+        if (
+            (event.key == 'i' && event.ctrlKey || event.key == 'I' && event.ctrlKey)
+        ) {
+            addItem()
+        }
+    })
 })
