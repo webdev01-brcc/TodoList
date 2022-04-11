@@ -81,7 +81,14 @@ const todoEditItem = ({ id, value, complete } = item) => {
                 onchange="toggleComplete(${id})"
             >
         </div>
-        <input type="text" class="form-control" aria-label="Text input with checkbox" value="${value}">
+        <input 
+            type="text" 
+            class="form-control" 
+            aria-label="Text input with checkbox" 
+            data-id="${id}"
+            value="${value}"
+            oninput="updateInput(event)"
+        >
         <button 
             class="btn btn-outline-danger" 
             type="button" 
@@ -188,10 +195,7 @@ const setActiveTodo = (id) => {
     renderActiveTodo(activeTodo)
 }
 
-const removeTodoItem = (id) => {
-    const items = activeTodo.items.filter(item => parseInt(item.id) !== id)
-    activeTodo = { ...activeTodo, items }
-
+const updateTodoList = (activeTodo) => {
     todos = todos.map(todo => {
         if (todo.id == activeTodo.id) {
             return activeTodo
@@ -199,7 +203,14 @@ const removeTodoItem = (id) => {
 
         return todo
     })
+    populateTheList()
+}
 
+const removeTodoItem = (id) => {
+    const items = activeTodo.items.filter(item => parseInt(item.id) !== id)
+    activeTodo = { ...activeTodo, items }
+
+    updateTodoList(activeTodo)
     renderActiveTodo(activeTodo)
 }
 
@@ -214,13 +225,23 @@ const toggleComplete = (id) => {
 
     activeTodo = { ...activeTodo, items }
 
-    todos = todos.map(todo => {
-        if (parseInt(todo.id) == activeTodo.id) {
-            return activeTodo
+    updateTodoList(activeTodo)
+}
+
+const updateInput = (event) => {
+    const value = event.target.value
+    const id = event.target.dataset.id
+
+    items = activeTodo.items.map(item => {
+        if (parseInt(item.id) == id) {
+            return { ...item, value }
         }
 
-        return todo
+        return item
     })
+
+    activeTodo = { ...activeTodo, items }
+    updateTodoList(activeTodo)
 }
 
 
@@ -230,7 +251,6 @@ window.addEventListener('DOMContentLoaded', () => {
     ocAddTodoSaveButton.addEventListener('click', ocAddTodoSave)
 
     document.addEventListener('keypress', (event) => {
-        // console.log(event)
         if (
             (event.key == 'i' && event.ctrlKey || event.key == 'I' && event.ctrlKey)
         ) {
