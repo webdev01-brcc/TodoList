@@ -78,6 +78,7 @@ const todoEditItem = ({ id, value, complete } = item) => {
                 value="${complete}"
                 aria-label="Checkbox for following text input"
                 ${complete ? 'checked' : ''}
+                onchange="toggleComplete(${id})"
             >
         </div>
         <input type="text" class="form-control" aria-label="Text input with checkbox" value="${value}">
@@ -202,8 +203,24 @@ const removeTodoItem = (id) => {
     renderActiveTodo(activeTodo)
 }
 
-const toggleComplete = () => {
+const toggleComplete = (id) => {
+    items = activeTodo.items.map(item => {
+        if (item.id == id) {
+            return { ...item, complete: !item.complete }
+        }
 
+        return item
+    })
+
+    activeTodo = { ...activeTodo, items }
+
+    todos = todos.map(todo => {
+        if (parseInt(todo.id) == activeTodo.id) {
+            return activeTodo
+        }
+
+        return todo
+    })
 }
 
 
