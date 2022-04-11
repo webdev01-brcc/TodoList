@@ -62,7 +62,13 @@ const todoListItem = (todo, index) => {
             >
                 Edit
             </button>
-            <button type="button" class="btn btn-danger btn-sm">Remove</button>
+            <button 
+                type="button" 
+                class="btn btn-danger btn-sm"
+                onclick="removeTodoList(${todo.id})"
+            >
+                Remove
+            </button>
         </td>
     </tr>
     `
@@ -244,6 +250,11 @@ const updateInput = (event) => {
     updateTodoList(activeTodo)
 }
 
+const removeTodoList = (id) => {
+    todos = todos.filter(todo => parseInt(todo.id) != id)
+    populateTheList()
+}
+
 
 //DOM Listen
 window.addEventListener('DOMContentLoaded', () => {
@@ -257,4 +268,5 @@ window.addEventListener('DOMContentLoaded', () => {
             addItem()
         }
     })
+
 })
