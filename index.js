@@ -6,6 +6,7 @@ const ocAddTodoItemsList = document.getElementById('ocAddTodoItemsList')
 const todoListBody = document.getElementById('todoListBody')
 const offcanvasEditTodoLabel = document.getElementById('offcanvasEditTodoLabel')
 const ocEditTodoList = document.getElementById('ocEditTodoList')
+const removeAllTodos = document.getElementById('removeAllTodos')
 let ocAddTodoItems = []
 let todos = []
 let activeTodo = {}
@@ -173,7 +174,7 @@ const ocAddTodoSave = () => {
         return alert(`Must have at least one item in the ${title} todo list.`)
     }
 
-    todos.push({
+    storageAddTodo({
         id,
         title,
         items: ocAddTodoItems
@@ -209,6 +210,8 @@ const updateTodoList = (activeTodo) => {
 
         return todo
     })
+    storageModifyTodos()
+    // window.localStorage.setItem('todos', JSON.stringify(todos))
     populateTheList()
 }
 
@@ -252,14 +255,42 @@ const updateInput = (event) => {
 
 const removeTodoList = (id) => {
     todos = todos.filter(todo => parseInt(todo.id) != id)
+    storageModifyTodos()
     populateTheList()
 }
 
+//LOCAL STORAGE
+const storageGetTodos = () => {
+    if (!JSON.parse(window.localStorage.getItem('todos'))) {//if the "todos" key doesn't exist...
+        window.localStorage.setItem('todos', JSON.stringify([]))//create todos
+    }
+
+    return JSON.parse(window.localStorage.getItem('todos'))
+}
+
+const storageAddTodo = (obj) => {
+    todos.push(obj)
+    storageModifyTodos()
+}
+
+const storageModifyTodos = () => {
+    window.localStorage.setItem('todos', JSON.stringify(todos))
+}
+
+const storageReset = () => {
+    window.localStorage.setItem('todos', JSON.stringify([]))
+    todos = []
+    populateTheList()
+}
 
 //DOM Listen
 window.addEventListener('DOMContentLoaded', () => {
+    todos = storageGetTodos()
+    populateTheList()
+
     ocAddTodoItem.addEventListener('click', addItem)
     ocAddTodoSaveButton.addEventListener('click', ocAddTodoSave)
+    removeAllTodos.addEventListener('click', storageReset)
 
     document.addEventListener('keypress', (event) => {
         if (
