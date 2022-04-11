@@ -9,9 +9,118 @@
     <title>Todo List</title>
 </head>
 <body>
-    <h1>Todo List</h1>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-sm-8 offset-sm-2">
+                <!-- ----- -->
+                <!-- TITLE -->
+                <!-- ----- -->
+                <div class="row">
+                    <div class="col">
+                        <h1>Todo List</h1>
+                    </div>
+                </div>
+
+                <!-- -------------- -->
+                <!-- ACTION BUTTONS -->
+                <!-- -------------- -->
+                <div class="row my-4">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
+                            href="#offcanvasAddTodo" role="button" aria-controls="offcanvasAddTodo">
+                            Add Todo
+                        </button>
+                        <button type="button" class="btn btn-danger">Remove All</button>
+                    </div>
+                </div>
+
+                <!-- ----- -->
+                <!-- TABLE -->
+                <!-- ----- -->
+                <div class="row">
+                    <div class="col">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">First</th>
+                                    <th scope="col">Last</th>
+                                    <th scope="col">Handle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td align="right">@mdo</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>@fat</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td colspan="2">Larry the Bird</td>
+                                    <td>@twitter</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- -------------------- -->
+    <!-- ADD TODO - OFFCANVAS -->
+    <!-- -------------------- -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasAddTodo" aria-labelledby="offcanvasAddTodoLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasAddTodoLabel">Add a New Todo</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="container-fluid">
+                <!-- ---------- -->
+                <!-- Todo Title -->
+                <!-- ---------- -->
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="ocAddTodoTitle" class="form-label">Title</label>
+                            <input type="email" class="form-control" id="ocAddTodoTitle" placeholder="Add a title">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ------------------------ -->
+                <!-- BUTTONS: ADD ITEM & SAVE -->
+                <!-- ------------------------ -->
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-secondary mr-2">+ Item</button>
+                        <button class="btn btn-success">Save</button>
+                    </div>
+                </div>
+
+                <!-- ITEMS -->
+                <div class="row">
+                    <div class="col mt-4">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Item" aria-label="Recipient's username"
+                                aria-describedby="button-addon2">
+                            <button class="btn btn-danger" type="button" id="button-addon2">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
 </body>
 </html>
